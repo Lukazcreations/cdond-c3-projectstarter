@@ -1,10 +1,10 @@
 1- URL01 
 A public git repository with my project code 
-URL01:
+URL01:https://github.com/Lukazcreations/give-your-application-auto-deploy-superpowers
 
 2- URL02
 Evidence of deployed and functioning front-end application in an S3 bucket
-
+URL02:
 
 3- URL03
 Evidence of deployed and functioning front-end application in CloudFront
