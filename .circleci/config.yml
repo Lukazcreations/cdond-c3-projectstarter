@@ -207,6 +207,7 @@ jobs:
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}  # This is the workflow ID from the previous step
 
+  run-migr
 
 workflows:
   default:
