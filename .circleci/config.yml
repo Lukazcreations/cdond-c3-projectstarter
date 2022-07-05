@@ -292,7 +292,7 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - install_aws_cli
+      - install_awscli
       - install_nodejs
       - restore_cache:
           keys: [frontend-deps]
