@@ -176,7 +176,7 @@ jobs:
   configure-infrastructure:
     docker:
     # Select a Docker image that supports Ansible
-      - image: cimg/base:stable
+      - image: python:3.7-alpine:3.16
     steps:
       # Checkout code from git
       # Add ssh keys with fingerprint
