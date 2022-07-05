@@ -172,7 +172,6 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - dependencies
       - run:
           name: Install tar utility
           command: |
