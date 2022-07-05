@@ -138,7 +138,7 @@ jobs:
           name: Install tar utility
           command: |
             # Your code here
-            sudo apt-get install -y tar gzip
+            yum install -y tar gzip
       - run:
           name: Ensure back-end infrastructure exists
           command: |
