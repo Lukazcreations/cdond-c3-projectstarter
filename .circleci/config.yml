@@ -107,7 +107,7 @@ jobs:
             # Your code here
             cd backend
             npm install
-            npm audit --audit-level=critical --prefix backend
+            npm audit fix --audit-level=critical --force
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
