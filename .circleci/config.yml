@@ -22,7 +22,7 @@ commands:
       - run:
           name: Installing NodeJS
           command: |
-            curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+            curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
             sudo apt install -y nodejs
   
   destroy-environment:
@@ -291,9 +291,9 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - dependencies
       - restore_cache:
           keys: [frontend-build]
+      - dependencies
       - run:
           name: Install dependencies
           command: |
@@ -334,28 +334,13 @@ jobs:
       # Add ssh keys with fingerprint
       # attach workspace
       - checkout
-      - dependencies
       - add_ssh_keys:
           fingerprints: ["13:1f:74:f8:18:85:87:77:85:b4:8b:80:9d:e8:75:56"]
       - attach_workspace:
           at: ~/
       - restore_cache:
           keys: [backend-build]
-      - run:
-          name: Install dependencies
-          command: |
-            # your code here
-            cd backend
-            npm install
-      - run:
-          name: Package Backend
-          command: |
-            cd backend
-            npm i
-            npm run build
-            tar -czf artifact.tar.gz dist/* package*
-            cd ..
-            cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
+      - dependencies
       - run:
           name: Deploy backend
           command: |
@@ -363,6 +348,12 @@ jobs:
             export TYPEORM_MIGRATIONS_DIR=./migrations
             export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
             export TYPEORM_MIGRATIONS=./migrations/*.ts
+            cd backend
+            npm i
+            npm run build
+            cd ..
+            # Zip the directory
+            tar -C backend -czvf artifact.tar.gz .
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
