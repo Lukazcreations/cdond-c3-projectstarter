@@ -399,6 +399,7 @@ jobs:
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text)
+            echo "BACKEND_IP = ${BACKEND_IP}"
       - run:
           name: Backend smoke test.
           command: |
@@ -429,6 +430,24 @@ jobs:
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}  # This is the workflow ID from the previous step
       - revert-migrations
+
+  cloudfront-update:
+    docker:
+      # Docker image here that supports AWS CLI
+      - image: cimg/base:stable
+    steps:
+      # Checkout code from git
+      - checkout
+      - dependencies
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+      - run:
+          name: Update cloudfront distribution
+          command: |
+            # your code here
+      # Here's where you will add some code to rollback on failure
 
 workflows:
   default:
