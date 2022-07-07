@@ -7,12 +7,13 @@ Evidence of deployed and functioning front-end application in an S3 bucket
 URL02:http://udapeople-51d644b.s3-website-us-east-1.amazonaws.com/
 
 3- URL03
-Evidence of deployed and functioning front-end application in CloudFront
-
+Evidence of and functioning front-end application in CloudFront
+URL03:https://d1qb2nb5cznatu.cloudfront.net/images/logo.png
 
 4- URL04
 Evidence of healthy back-end application
-
+URL04:https://d1qb2nb5cznatu.cloudfront.net/images/logo.png
 
 5- URL05
 Evidence of Prometheus Server
+URL05:https://prometheus.io/
