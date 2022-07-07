@@ -389,7 +389,6 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            cd backend
             npm install
       - run:
           name: Get backend url
@@ -447,7 +446,17 @@ jobs:
           name: Update cloudfront distribution
           command: |
             # your code here
+            # Change the initial stack name, as applicable to you
+            aws cloudformation deploy \
+            --template-file .circleci/files/cloudfront.yml \
+            --stack-name InitialStack \
+            --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --tags project=udapeople
+          echo Current Workflow ID: ${CIRCLE_WORKFLOW_ID:0:7}
       # Here's where you will add some code to rollback on failure
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}  # This is the workflow ID from the previous step
+      - revert-migrations
 
 workflows:
   default:
@@ -481,3 +490,5 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-frontend, deploy-backend]
+      - cloudfront-update:
+          requires: [smoke-test]
