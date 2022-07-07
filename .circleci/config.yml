@@ -381,8 +381,14 @@ jobs:
     docker:
       - image: python:3.10-alpine3.16
     steps:
+      # Checkout code from git
       - checkout
-      - dependencies
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update --no-cache curl aws-cli tar gzip nodejs npm
+      - attach_workspace:
+          at: ~/
       - run:
           name: Get backend url
           command: |
