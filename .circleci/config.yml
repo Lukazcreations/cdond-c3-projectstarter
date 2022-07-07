@@ -345,10 +345,6 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            cd backend
-            touch .env
-            cat .env
-            pip install -r requirements.txt
       - run:    
           name: Deploy backend
           command: |
