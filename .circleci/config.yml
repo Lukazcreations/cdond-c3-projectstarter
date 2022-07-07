@@ -386,24 +386,16 @@ jobs:
       - checkout
       - dependencies
       - run:
-          name: Install dependencies
-          command: |
-            # your code here
-            npm install
-      - run:
-          name: Get backend url
-          command: |
-            # your code here
-            BACKEND_IP=$(aws ec2 describe-instances \
-              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text)
-            echo "BACKEND_IP = ${BACKEND_IP}"
-      - run:
           name: Backend smoke test.
           command: |
             # your code here
             # Fetch and prepare the BACKEND_IP env var
+            npm i
+            export BACKEND_IP=$(aws ec2 describe-instances \
+              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text)
+            echo "BACKEND_IP = ${BACKEND_IP}"
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
             if curl "${API_URL}/api/status" | grep "ok"
@@ -457,6 +449,37 @@ jobs:
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}  # This is the workflow ID from the previous step
       - revert-migrations
+
+  cleanup:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - install_awscli
+      - run:
+          name: Fetch old stack workflow id
+          command: |
+            export OldWorkflowID=$(aws cloudformation \
+            list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+            --no-paginate --output text)
+            echo OldWorkflowID: "${OldWorkflowID}"
+            echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
+            # fetch all stacks names   
+            export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
+            --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
+            
+            echo Stack names: "${STACKS[@]}"    
+            
+            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+            then
+            echo "=============delete confirmed======================="
+            aws s3 rm s3://udapeople-${OldWorkflowID} --recursive
+            aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+            aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+            else
+            echo "==============cannot cleanup========================"
+            echo "no stacks found"
+            fi
 
 workflows:
   default:
