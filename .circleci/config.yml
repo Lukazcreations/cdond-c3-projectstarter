@@ -389,13 +389,13 @@ jobs:
             --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-            # curl "${API_URL}/api/status"
-            # if curl -s "${API_URL}/api/status" | grep "ok"
-            # then
-            #     exit 0
-            # else
-            #     exit 1
-            # fi
+            curl "${API_URL}/api/status"
+            if curl -s "${API_URL}/api/status" | grep "ok"
+            then
+                exit 0
+            else
+                exit 1
+            fi
       - run:
           name: Frontend smoke test.
           command: |
@@ -516,7 +516,7 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-frontend, deploy-backend]
-      - cloudfront-update:
-          requires: [smoke-test]
+      # - cloudfront-update:
+      #     requires: [smoke-test]
       # - cleanup:
       #     requires: [cloudfront-update]
