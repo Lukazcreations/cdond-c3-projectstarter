@@ -201,7 +201,7 @@ jobs:
             echo TYPEORM_PORT=$TYPEORM_PORT >> ~/project/backend/.env
             echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> ~/project/backend/.env
             cat ~/project/backend/.env
-
+            # configure server
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
       - persist_to_workspace:
