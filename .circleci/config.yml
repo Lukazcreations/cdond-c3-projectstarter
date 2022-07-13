@@ -239,8 +239,19 @@ jobs:
       - run:
           name: Configure server
           command: |
+            # add environment variables to server
+            echo NODE_ENV=production > ~/project/backend/.env
+            echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> ~/project/backend/.env
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ~/project/backend/.env
+            echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> ~/project/backend/.env
+            echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> ~/project/backend/.env
+            echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> ~/project/backend/.env
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ~/project/backend/.env
+            echo TYPEORM_PORT=$TYPEORM_PORT >> ~/project/backend/.env
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> ~/project/backend/.env
+            cat ~/project/backend/.env
+
             cd .circleci/ansible
-            cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
       - persist_to_workspace:
           root: ~/
@@ -264,10 +275,8 @@ jobs:
           command: |
             # Your code here
             cd backend
-            touch .env
-            cat .env
-            npm i
-            npm run build
+            npm install
+            npm run build 
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
       - run:
@@ -290,8 +299,8 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - restore_cache:
-          keys: [frontend-build]
+      # - restore_cache:
+      #     keys: [frontend-build]
       # - dependencies
       - attach_workspace:
           at: ~/
@@ -339,8 +348,8 @@ jobs:
           fingerprints: ["13:1f:74:f8:18:85:87:77:85:b4:8b:80:9d:e8:75:56"]
       - attach_workspace:
           at: ~/
-      - restore_cache:
-          keys: [backend-build]
+      # - restore_cache:
+      #     keys: [backend-build]
       # - dependencies
       - run:
           name: Install dependencies
@@ -348,22 +357,22 @@ jobs:
             # your code here
             apk add --update --no-cache tar gzip nodejs npm tree aws-cli ansible
       - run:
+          name: Prepare backend
+          command: |
+            # your code here
+            cd backend
+            npm i --legacy-peer-deps
+            npm run build
+            cd ..
+            tar -C backend -czvf artifact.tar.gz . 2>/dev/null
+            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
+            mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
+            cp ~/project/backend/.env .circleci/ansible/roles/deploy/files/backend.env
+      - run:
           name: Deploy backend
           command: |
             # your code here
-            export TYPEORM_MIGRATIONS_DIR=./migrations
-            export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
-            export TYPEORM_MIGRATIONS=./migrations/*.ts
-            cd backend
-            npm install
-            npm run build
-            cd ..
-            tar -C backend -czvf artifact.tar.gz .
-            tree -afC /root/project/.circleci -I *node_modules*
-            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
-            mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
             cd .circleci/ansible
-            echo "Contents of the inventory.txt file is ------$(tail -1 inventory.txt)"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure

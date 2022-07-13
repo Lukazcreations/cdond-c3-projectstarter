@@ -1,39 +1,38 @@
----
-- name: 'update and upgrade packages.'
-  become: true
+- name: 'upgrade packages'
+  become: yes
   apt:
-    upgrade: yes
+    upgrade: 'yes'
+
+- name: 'update apt packages'
+  become: yes
+  apt:
     update_cache: yes
-    cache_valid_time: 86400
 
-- name: remove unneeded deps
-  become: true
-  apt:
-    autoremove: yes
-
-- name: install deps
-  become: true
+- name: 'install dependencies'
+  become: yes
   apt:
     name: ['nodejs', 'npm']
     state: latest
     update_cache: yes
 
-- name: 'install pm2'
-  become: true
+- name: install pm2
+  become: yes
   npm:
     name: pm2
     global: yes
-    state: present
+    state: latest
     production: yes
 
-- name: extract artifact
-  become: true
+- name: 'Unarchive backend files'
+  become: yes
   unarchive:
     src: files/artifact.tar.gz
     dest: .
 
 - name: start app
-  become: true
+  become: yes
   shell: |
+    npm run migrations
     pm2 stop default
+    export $(grep TYPEORM_HOST /home/ubuntu/.env)
     pm2 start npm -- start
