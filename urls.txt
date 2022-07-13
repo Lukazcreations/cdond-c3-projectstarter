@@ -4,16 +4,16 @@ URL01:https://github.com/Lukazcreations/give-your-application-auto-deploy-superp
 
 2- URL02
 Evidence of deployed and functioning front-end application in an S3 bucket
-URL02:http://udapeople-51d644b.s3-website-us-east-1.amazonaws.com/
+URL02:http://udapeople-ecfd95f.s3-website-us-east-1.amazonaws.com/
 
 3- URL03
 Evidence of and functioning front-end application in CloudFront
-URL03:https://d1qb2nb5cznatu.cloudfront.net/images/logo.png
+URL03:https://d14bo2u8n2kr7z.cloudfront.net
 
 4- URL04
 Evidence of healthy back-end application
-URL04:https://d1qb2nb5cznatu.cloudfront.net/images/logo.png
+URL04:
 
 5- URL05
 Evidence of Prometheus Server
-URL05:https://prometheus.io/
+URL05:
