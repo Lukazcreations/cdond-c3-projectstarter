@@ -334,15 +334,14 @@ jobs:
             --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-            # if curl -s ${API_URL}/api/status | grep "ok"
-            if curl -s https://google.com | grep "ok"
-            then
-              echo "SUCCESS, Backend Deployed!!"
-              return 0
-            else
-              echo "FAILED, Something went Wrong!!"
-              return 1
-            fi
+            # if curl "${API_URL}/api/status" | grep "ok"
+            # then
+            #   echo "SUCCESS, Backend Deployed!!"
+            #   return 0
+            # else
+            #   echo "FAILED, Something went Wrong!!"
+            #   return 1
+            # fi
 
       - run:
           name: Frontend Smoke Test
@@ -359,8 +358,8 @@ jobs:
               return 1
             fi
 
-      # - destroy-environment
-      # - revert-migrations
+      - destroy-environment
+      - revert-migrations
       
 workflows:
   default:
