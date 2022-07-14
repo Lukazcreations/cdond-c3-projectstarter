@@ -36,21 +36,3 @@
     pm2 stop default
     export $(grep TYPEORM_HOST /home/ubuntu/.env)
     pm2 start npm -- start
-
-- name: Start backend with PM2
-  become: yes
-  shell: |
-    pm2 start ./main.js
-  args:
-    chdir: /home/ubuntu/app/dist
-  environment:
-    ENVIRONMENT: production
-    TYPEORM_CONNECTION: postgres
-    TYPEORM_ENTITIES: "/home/ubuntu/app/dist/modules/domain/**/*.entity{.ts,.js}"
-    TYPEORM_MIGRATIONS: "/home/ubuntu/app/dist/migrations/*.js"
-    TYPEORM_MIGRATIONS_DIR: "/home/ubuntu/app/dist/migrations"
-    TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST')}}"
-    TYPEORM_PORT: "5432"
-    TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME')}}"
-    TYPEORM_PASSWORD: "lbudacity"
-    TYPEORM_DATABASE: " {{ lookup('env', 'TYPEORM_DATABASE')}}"
