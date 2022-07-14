@@ -342,6 +342,7 @@ jobs:
               echo "FAILED, Something went Wrong!!"
               return 1
             fi
+
       - run:
           name: Frontend Smoke Test
           command: |
@@ -356,6 +357,7 @@ jobs:
               echo "FAILED, Something went Wrong!!"
               return 1
             fi
+            
       - destroy-environment
       - revert-migrations
       
