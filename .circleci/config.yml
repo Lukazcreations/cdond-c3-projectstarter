@@ -318,6 +318,8 @@ jobs:
       - image: python:3.10.5-alpine3.16
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints: ['eb:9b:4d:ec:5b:3f:d6:c5:e2:18:c1:ab:17:60:d0:8a']
       - run:
           name: Install Dependencies
           command: |
@@ -334,14 +336,14 @@ jobs:
             --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-            # if curl "${API_URL}/api/status" | grep "ok"
-            # then
-            #   echo "SUCCESS, Backend Deployed!!"
-            #   return 0
-            # else
-            #   echo "FAILED, Something went Wrong!!"
-            #   return 1
-            # fi
+            if curl "${API_URL}/api/status" | grep "ok"
+            then
+              echo "SUCCESS, Backend Deployed!!"
+              return 0
+            else
+              echo "FAILED, Something went Wrong!!"
+              return 1
+            fi
 
       - run:
           name: Frontend Smoke Test
@@ -352,7 +354,7 @@ jobs:
             then
               # Change this to 0 after the job fails
               echo "SUCCESS, Frontend Deployed!!"
-              return 0
+              return 1
             else
               echo "FAILED, Something went Wrong!!"
               return 1
