@@ -178,7 +178,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ['13:1f:74:f8:18:85:87:77:85:b4:8b:80:9d:e8:75:56']
+          fingerprints: ['eb:9b:4d:ec:5b:3f:d6:c5:e2:18:c1:ab:17:60:d0:8a']
       - run:
           name: install required dependencies
           command: |
@@ -285,7 +285,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ['13:1f:74:f8:18:85:87:77:85:b4:8b:80:9d:e8:75:56']
+          fingerprints: ['eb:9b:4d:ec:5b:3f:d6:c5:e2:18:c1:ab:17:60:d0:8a']
       - attach_workspace:
           at: ~/
       - run:
@@ -356,8 +356,9 @@ jobs:
               echo "FAILED, Something went Wrong!!"
               return 1
             fi
-      - destroy-environment
-      - revert-migrations
+      # - destroy-environment
+      # - revert-migrations
+      
 workflows:
   default:
     jobs:
