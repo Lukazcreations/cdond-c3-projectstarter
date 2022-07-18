@@ -4,11 +4,11 @@ URL01:https://github.com/Lukazcreations/give-your-application-auto-deploy-superp
 
 2- URL02
 Evidence of deployed and functioning front-end application in an S3 bucket
-URL02:http://udapeople-da35468.s3-website-us-east-1.amazonaws.com/
+URL02:http://udapeople-32bc3f6.s3-website-us-east-1.amazonaws.com/#/employees
 
 3- URL03
 Evidence of and functioning front-end application in CloudFront
-URL03:https://d2yxivxzl02rwb.cloudfront.net
+URL03:http://d2yxivxzl02rwb.cloudfront.net/#/employees
 
 4- URL04
 Evidence of healthy back-end application
