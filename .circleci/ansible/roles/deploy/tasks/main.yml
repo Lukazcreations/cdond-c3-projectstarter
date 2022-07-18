@@ -1,38 +1,31 @@
-- name: 'upgrade packages'
-  become: yes
-  apt:
-    upgrade: 'yes'
+---
+- name: 'creates backend app directory.'
+  file:
+    path: ~/backend-app
+    state: directory
 
-- name: 'update apt packages'
-  become: yes
-  apt:
-    update_cache: yes
-
-- name: 'install dependencies'
-  become: yes
-  apt:
-    name: ['nodejs', 'npm']
-    state: latest
-    update_cache: yes
-
-- name: install pm2
-  become: yes
-  npm:
-    name: pm2
-    global: yes
-    state: latest
-    production: yes
-
-- name: 'Unarchive backend files'
-  become: yes
+- name: 'unarchive backend files'
   unarchive:
-    src: files/artifact.tar.gz
-    dest: .
+    src: artifact.tar.gz
+    dest: ~/backend-app
 
-- name: start app
-  become: yes
+- name: 'install node dependencies'
   shell: |
-    npm run migrations
+    cd ~/backend-app
+    npm i
+
+- name: 'Excute node app with PM2'
+  shell: |
+    cd ~/backend-app/dist
     pm2 stop default
-    export $(grep TYPEORM_HOST /home/ubuntu/.env)
-    pm2 start npm -- start
+    pm2 start main.js
+  register: excute_node
+
+- name: print message
+  debug:
+    msg: '{{ excute_node.stdout_lines }}'
+
+- name: 'cinfigure pm2 to start as service'
+  become: true
+  shell: |
+    env PATH=$PATH:/usr/local/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu
