@@ -62,25 +62,3 @@ Before you submit your project, please check your work against the project rubri
 ### License
 
 [License](LICENSE.md)
-
-
-wget https://github.com/prometheus/prometheus/releases/download/v2.37.0/prometheus-2.37.0.linux-amd64.tar.gz
-tar xvfz prometheus-2.37.0.linux-amd64.tar.gz
-
-sudo cp prometheus-2.37.0.linux-amd64/prometheus /usr/local/bin
-sudo cp prometheus-2.37.0.linux-amd64/promtool /usr/local/bin/
-sudo cp -r prometheus-2.37.0.linux-amd64/consoles /etc/prometheus
-sudo cp -r prometheus-2.37.0.linux-amd64/console_libraries /etc/prometheus
-
-sudo cp prometheus-2.37.0.linux-amd64/promtool /usr/local/bin/
-rm -rf prometheus-2.37.0.linux-amd64.tar.gz prometheus-2.37.0.linux-amd64
-
-
-wget https://github.com/prometheus/alertmanager/releases/download/v0.24.0/alertmanager-0.24.0.linux-amd64.tar.gz
-tar xvfz alertmanager-0.24.0.linux-amd64.tar.gz
-
-sudo cp alertmanager-0.24.0.linux-amd64/alertmanager /usr/local/bin
-sudo cp alertmanager-0.24.0.linux-amd64/amtool /usr/local/bin/
-sudo mkdir /var/lib/alertmanager
-
-rm -rf alertmanager*
